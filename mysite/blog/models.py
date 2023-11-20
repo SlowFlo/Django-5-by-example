@@ -4,7 +4,6 @@ from django.utils import timezone
 
 
 class Post(models.Model):
-
     class Status(models.TextChoices):
         # embeded class : allow to easily reference choice labels, values, or names from anywhere in the code
         # ex: Post.Status.DRAFT
@@ -17,18 +16,22 @@ class Post(models.Model):
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250)
-    author = models.ForeignKey(User,
-                               on_delete=models.CASCADE,
-                               related_name="blog_posts")  # allow to use: user.blog_posts
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="blog_posts",  # allow to use: user.blog_posts
+    )
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     # from django.db.models.functions import Now
     # publish = models.DateTimeField(db_default=Now()) Same but with database-computed default
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=2,
-                              choices=Status,
-                              default=Status.DRAFT)
+    status = models.CharField(
+        max_length=2,
+        choices=Status,
+        default=Status.DRAFT,
+    )
 
     class Meta:
         ordering = ["-publish"]
