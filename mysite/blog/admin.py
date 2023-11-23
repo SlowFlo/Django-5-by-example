@@ -13,3 +13,5 @@ class PostAdmin(admin.ModelAdmin):
     raw_id_fields = ["author"]
     date_hierarchy = "publish"
     ordering = ["status", "publish"]
+    # Deactivate the "Show counts" button and show them by default
+    show_facets = admin.ShowFacets.ALWAYS
