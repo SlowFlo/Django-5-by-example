@@ -38,7 +38,9 @@ class Post(models.Model):
         default=Status.DRAFT,
     )
 
-    objects = models.Manager()  # The default manager.
+    # The default manager (because declared first).
+    # we can use default_manager_name in Meta to specify a different default manager
+    objects = models.Manager()
     published = PublishedManager()  # Our custom manager.
 
     class Meta:
