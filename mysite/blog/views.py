@@ -1,7 +1,9 @@
+from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
+from blog.forms import EmailPostForm
 from blog.models import Post
 
 
@@ -46,3 +48,34 @@ def post_detail(request, year, month, day, post):
     )
 
     return render(request, "blog/post/detail.html", {"post": post})
+
+
+def post_share(request, post_id):
+    # Retrieve post by id
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+
+    sent = False
+    if request.method == "POST":
+        # Form was submitted
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            # Form fields passed validation
+            # If the form is not valid, cleaned_data will contain only valid fields
+            cd = form.cleaned_data
+            # build_absolute_uri add the HTTP schema and hostname
+            post_url = request.build_absolute_uri(post.get_absolute_url())
+            subject = f"{cd['name']} ({cd['email']}) recommends you read {post.title}"
+            message = f"Read {post.title} at {post_url}\n\n{cd['name']}'s comments: {cd['comments']}"
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=None,  # Use the DEFAULT_FROM_EMAIL setting
+                recipient_list=[cd["to"]],
+            )
+            sent = True
+    else:
+        form = EmailPostForm()
+
+    return render(
+        request, "blog/post/share.html", {"post": post, "form": form, "sent": sent}
+    )
