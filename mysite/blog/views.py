@@ -60,10 +60,13 @@ def post_detail(request, year, month, day, post):
     # Form for users to comment
     form = CommentForm()
 
-    # List of similar posts
+    # List of similar posts (we could also use the similar_objects() taggit manager)
     # flat=True -> [1, 2, 3, ...] instead of [(1,), (2,), (3,) ...]
     post_tags_ids = post.tags.values_list("id", flat=True)
+
+    # The filter will return duplicates if a post has several tags that are in the current post ...
     similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    # ... but the annotate use a GROUP BY and COUNT() count the number of same row
     similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
         "-same_tags", "-publish"
     )[:4]
