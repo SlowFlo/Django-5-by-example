@@ -14,5 +14,11 @@ class Post(models.Model):
     # from django.db.models.functions import Now
     # publish = models.DateTimeField(db_default=Now())
 
+    class Meta:
+        ordering = ["-publish"]
+        indexes = [
+            models.Index(fields=["-publish"]),
+        ]
+
     def __str__(self):
         return self.title
