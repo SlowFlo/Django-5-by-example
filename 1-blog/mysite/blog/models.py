@@ -3,12 +3,24 @@ from django.utils import timezone
 
 
 class Post(models.Model):
+    # good practice: define choices inside the model class.
+    # -> allow to reference choice labels, values, or names from anywhere;
+    # ex: Post.Status.DRAFT
+    class Status(models.TextChoices):
+        DRAFT = "DF", "Draft"
+        PUBLISHED = "PB", "Published"
+
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250)
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    status = models.CharField(
+        max_length=2,
+        choices=Status,
+        default=Status.DRAFT,
+    )
 
     # if we want to use database-computed default value, we can do :
     # from django.db.models.functions import Now
