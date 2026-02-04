@@ -3,6 +3,11 @@ from django.db import models
 from django.utils import timezone
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Post.Status.PUBLISHED)
+
+
 class Post(models.Model):
     # good practice: define choices inside the model class.
     # -> allow to reference choice labels, values, or names from anywhere;
@@ -31,6 +36,9 @@ class Post(models.Model):
     # if we want to use database-computed default value, we can do :
     # from django.db.models.functions import Now
     # publish = models.DateTimeField(db_default=Now())
+
+    objects = models.Manager()  # default manager.
+    published = PublishedManager()  # Our custom manager.
 
     class Meta:
         ordering = ["-publish"]
