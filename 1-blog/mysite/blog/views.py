@@ -1,9 +1,11 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView
 
 from blog.models import Post
 
 
+# Old post list function-based view
 def post_list(request):
     post_list = Post.published.all()
     # Pagination with 3 posts per page
@@ -23,6 +25,20 @@ def post_list(request):
         "blog/post/list.html",
         {"posts": posts},
     )
+
+
+class PostListView(ListView):
+    """
+    Alternative post list view.
+    """
+
+    # model = Post => django would define the queryset `Post.objects.all()` by default
+    queryset = Post.published.all()
+    context_object_name = "posts"  # The default object name is `object_list`
+    paginate_by = 3
+
+    # template default to `blog/post_list.html` if not set
+    template_name = "blog/post/list.html"
 
 
 def post_detail(request, year, month, day, post):
