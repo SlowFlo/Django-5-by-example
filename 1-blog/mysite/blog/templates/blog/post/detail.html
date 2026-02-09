@@ -13,4 +13,26 @@
             Share this post
         </a>
     </p>
+    {% comment %}
+    The {% with %} template tag is useful for avoiding hitting the database or accessing
+    expensive methods multiple times.
+    {% endcomment %}
+    {% with comments.count as total_comments %}
+        <h2>
+            {# 0 comments, 1 comment, or N comments #}
+            {{ total_comments }} comment{{ total_comments|pluralize }}
+        </h2>
+    {% endwith %}
+    {% for comment in comments %}
+    	<div class="comment">
+            <p class="info">
+                Comment {{ forloop.counter }} by {{ comment.name }}
+                {{ comment.created }}
+            </p>
+            {{ comment.body|linebreaks }}
+        </div>
+    {% empty %}
+        <p>There are no comments.</p>
+    {% endfor %}
+    {% include "blog/post/includes/comment_form.html" %}
 {% endblock %}
