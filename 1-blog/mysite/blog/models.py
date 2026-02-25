@@ -86,3 +86,26 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.name} on {self.post}"
+
+
+# Exemple of CompositePrimaryKey :
+# A composite key could be used for a new model to track a user’s favorite posts, where the important
+# data comes from two foreign keys – first to the user, and then to the post – and these columns help to
+# ensure uniqueness in the composite key
+
+# Models who use it cannot, for now, be registered in the Admin interface, see this ticket:
+# https://code.djangoproject.com/ticket/35953
+# class FavouritePost(models.Model):
+#     pk = models.CompositePrimaryKey(
+#         "user",
+#         "post",
+#     )
+#     user = models.ForeignKey(
+#         settings.AUTH_USER_MODEL,
+#         on_delete=models.CASCADE,
+#     )
+#     post = models.ForeignKey(
+#         "blog.Post",
+#         on_delete=models.CASCADE,
+#     )
+#     created = models.DateTimeField(auto_now_add=True)
