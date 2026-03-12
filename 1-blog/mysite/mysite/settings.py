@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# It’s good practice to keep the Django packages at the top, third-party packages in the
+# middle, and local applications at the end of INSTALLED_APPS.
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "taggit",
     "blog.apps.BlogConfig",
 ]
 
@@ -128,13 +131,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # There is also the django-anymail app for using providers like SendGrid and Amazon SES
 # https://anymail.dev/en/stable/installation/
 # Email server configuration
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
 
 # If you can’t use an SMTP server, you can tell Django to write emails to the console
 # by adding the following setting
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
