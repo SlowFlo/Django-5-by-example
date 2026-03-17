@@ -18,8 +18,6 @@ class Post(models.Model):
         DRAFT = "DF", "Draft"
         PUBLISHED = "PB", "Published"
 
-    tags = TaggableManager()
-
     title = models.CharField(max_length=250)
     slug = models.SlugField(
         max_length=250,
@@ -46,6 +44,7 @@ class Post(models.Model):
 
     objects = models.Manager()  # default manager.
     published = PublishedManager()  # Our custom manager.
+    tags = TaggableManager()
 
     class Meta:
         ordering = ["-publish"]
