@@ -82,8 +82,6 @@ def post_detail(request, year, month, day, post):
         tags__in=post_tags_ids,
     ).exclude(id=post.id)
 
-    print(list(similar_posts))
-
     # Count("tags") counts only the shared tags (JOIN is already filtered above)
     similar_posts = similar_posts.annotate(
         same_tags=Count("tags"),
